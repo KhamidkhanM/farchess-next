@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Logo from '../common/Logo';
 import Avatar from '../common/Avatar';
-import { currentUser } from '../../data/demo';
+import useCurrentMember from '../../hooks/useCurrentMember';
+import { CURRENT_USERNAME } from '../../config';
 
 // Each icon is a single SVG path, drawn with a 2px stroke
 const menu = [
@@ -28,6 +29,8 @@ const menu = [
 const Sidebar = () => {
 	const router = useRouter();
 	const onProfile = router.pathname === '/profile';
+	const { data: member } = useCurrentMember();
+	const blitz = member?.ratings.find((rating) => rating.kind === 'Blitz')?.value;
 
 	return (
 		<nav
@@ -78,11 +81,11 @@ const Sidebar = () => {
 					onProfile ? 'bg-brass text-espresso hover:text-espresso' : 'bg-panel text-cream hover:text-cream'
 				}`}
 			>
-				<Avatar name={currentUser.username} size="sm" tone={onProfile ? 'dark' : 'brass'} />
+				<Avatar name={CURRENT_USERNAME} size="sm" tone={onProfile ? 'dark' : 'brass'} />
 				<span className="flex flex-col">
-					<span className="font-bold">{currentUser.username}</span>
+					<span className="font-bold">{CURRENT_USERNAME}</span>
 					<span className={`font-mono text-[13px] ${onProfile ? '' : 'text-muted'}`}>
-						blitz {currentUser.ratings.blitz}
+						blitz {blitz ?? '…'}
 					</span>
 				</span>
 			</Link>

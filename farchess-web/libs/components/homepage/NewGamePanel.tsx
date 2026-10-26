@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { timeControls } from '../../data/demo';
+import { TimeControl } from '../../types/api';
 
-const NewGamePanel = () => {
+interface NewGamePanelProps {
+	timeControls: TimeControl[];
+}
+
+const NewGamePanel = ({ timeControls }: NewGamePanelProps) => {
 	const [picked, setPicked] = useState<string>('3+2');
 
 	return (

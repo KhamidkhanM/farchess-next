@@ -1,7 +1,12 @@
 import Link from 'next/link';
-import { liveGames } from '../../data/demo';
+import { GameSummary } from '../../types/api';
+import { moveNumber } from '../../utils';
 
-const LiveGames = () => {
+interface LiveGamesProps {
+	games: GameSummary[];
+}
+
+const LiveGames = ({ games }: LiveGamesProps) => {
 	return (
 		<section aria-labelledby="watch-live" className="flex min-w-0 flex-[999_1_480px] flex-col gap-3.5">
 			<div className="flex items-baseline justify-between">
@@ -14,19 +19,20 @@ const LiveGames = () => {
 			</div>
 
 			<div className="flex flex-col overflow-hidden rounded-[18px] bg-panel">
-				{liveGames.map((game) => (
+				{games.length === 0 && <p className="px-[18px] py-3.5 text-muted">Nobody is playing right now.</p>}
+				{games.map((game) => (
 					<Link
-						key={game.id}
-						href="/game"
+						key={game._id}
+						href={`/game?id=${game._id}`}
 						className="flex flex-wrap items-center gap-3.5 border-t border-line px-[18px] py-3.5 text-cream first:border-t-0 hover:bg-panel-raised hover:text-cream"
 					>
-						<span className="min-w-16 rounded-lg bg-line px-2.5 py-1 text-center font-mono text-[13px]">{game.time}</span>
+						<span className="min-w-16 rounded-lg bg-line px-2.5 py-1 text-center font-mono text-[13px]">{game.timeControl}</span>
 						<span className="flex-[1_1_260px] font-semibold">
-							{game.white} <span className="font-mono text-[13px] text-muted">{game.whiteRating}</span>
+							{game.white.username} <span className="font-mono text-[13px] text-muted">{game.white.rating}</span>
 							&nbsp; vs &nbsp;
-							{game.black} <span className="font-mono text-[13px] text-muted">{game.blackRating}</span>
+							{game.black.username} <span className="font-mono text-[13px] text-muted">{game.black.rating}</span>
 						</span>
-						<span className="font-mono text-[13px] text-muted">move {game.move}</span>
+						<span className="font-mono text-[13px] text-muted">move {moveNumber(game.moves)}</span>
 					</Link>
 				))}
 			</div>
