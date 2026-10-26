@@ -14,7 +14,7 @@ const ApiStatus = ({ loading, error }: ApiStatusProps) => {
 	}
 	if (error) {
 		return (
-			<div role="alert" className="flex flex-col gap-1 rounded-[18px] bg-panel p-5">
+			<div role="alert" className="flex flex-col gap-1 self-start rounded-[18px] bg-panel p-5">
 				<p className="font-bold text-loss">Could not load this from the server.</p>
 				<p className="text-sm text-muted">
 					{error === 'Failed to fetch' ? 'Is farchess-api running? Start it with npm run start:dev.' : error}
