@@ -3,6 +3,9 @@
 export const currentUser = {
 	username: 'khamid',
 	city: 'Tashkent',
+	joined: 'March 2026',
+	gamesPlayed: 1462,
+	favoriteOpenings: 'Italian with white, Caro-Kann with black',
 	ratings: { bullet: 1488, blitz: 1612, rapid: 1705, puzzles: 1840 },
 };
 
@@ -57,3 +60,27 @@ export const demoGame = {
 		{ id: 2, from: 'khamid', text: 'you too!' },
 	],
 };
+
+export const ratingCards = [
+	{ kind: 'Bullet', value: 1488, change: -12, note: '214 games' },
+	{ kind: 'Blitz', value: 1612, change: 34, note: '1,092 games' },
+	{ kind: 'Rapid', value: 1705, change: 8, note: '156 games' },
+	{ kind: 'Puzzles', value: 1840, change: 21, note: '2,310 solved' },
+];
+
+// Blitz rating at the end of each of the last 12 weeks
+export const blitzHistory = [1480, 1492, 1475, 1510, 1534, 1521, 1549, 1566, 1590, 1640, 1578, 1612];
+
+export const coachTip = {
+	title: 'Strong openings, leaky endgames.',
+	text: 'In 7 of your 11 losses you were equal or better at move 30. Most slips came in king-and-pawn endings where your king stayed back too long.',
+	action: 'Practice 10 endgames',
+};
+
+export const recentGames = [
+	{ id: 1, result: 'win', opponent: 'player_one', opponentRating: 1638, opening: 'Italian Game', time: '3+2', change: 9 },
+	{ id: 2, result: 'loss', opponent: 'player_two', opponentRating: 1701, opening: 'Caro-Kann, Advance', time: '3+2', change: -6 },
+	{ id: 3, result: 'draw', opponent: 'player_three', opponentRating: 1594, opening: 'Queen’s Gambit Declined', time: '5+0', change: 1 },
+	{ id: 4, result: 'win', opponent: 'player_four', opponentRating: 1622, opening: 'Italian Game', time: '3+2', change: 8 },
+	{ id: 5, result: 'win', opponent: 'player_five', opponentRating: 1580, opening: 'Sicilian, Alapin', time: '10+0', change: 6 },
+] as const;
