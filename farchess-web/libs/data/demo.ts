@@ -32,3 +32,28 @@ export const upcomingEvent = {
 	name: 'farchess Weekend Arena',
 	details: '3+2 · 7 rounds Swiss · 64 of 128 joined',
 };
+
+export const demoGame = {
+	title: 'Rated blitz 3+2 · Italian Game · 14 watching',
+	// Position after 9...h6, white to move
+	fen: 'r1bq1rk1/bpp2pp1/p1np1n1p/4p3/2B1P3/2PP1N1P/PP3PP1/RNBQR1K1',
+	lastMove: ['h7', 'h6'],
+	moves: [
+		['e4', 'e5'],
+		['Nf3', 'Nc6'],
+		['Bc4', 'Nf6'],
+		['d3', 'Bc5'],
+		['O-O', 'd6'],
+		['c3', 'O-O'],
+		['Re1', 'a6'],
+		['Bb3', 'Ba7'],
+		['h3', 'h6'],
+	],
+	evaluation: 0.6, // positive means white is better
+	white: { username: 'khamid', rating: 1612, clock: '1:58', captured: '♟' },
+	black: { username: 'opponent', rating: 1638, clock: '2:41', captured: '♙♙' },
+	chat: [
+		{ id: 1, from: 'opponent', text: 'gl hf' },
+		{ id: 2, from: 'khamid', text: 'you too!' },
+	],
+};
