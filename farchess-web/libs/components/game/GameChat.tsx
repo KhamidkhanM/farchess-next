@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 
 interface ChatMessage {
-	id: number;
+	id: string;
 	from: string;
 	text: string;
 }
@@ -20,7 +20,7 @@ const GameChat = ({ me, initialMessages }: GameChatProps) => {
 		e.preventDefault();
 		const text = draft.trim();
 		if (!text) return;
-		setMessages([...messages, { id: Date.now(), from: me, text }]);
+		setMessages([...messages, { id: String(Date.now()), from: me, text }]);
 		setDraft('');
 	};
 

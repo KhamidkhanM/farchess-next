@@ -27,7 +27,8 @@ const PlayerCard = ({ username, rating, side, clock, captured, isYou = false }: 
 					{isYou && ' · your move'}
 				</span>
 				<span className={`font-mono text-[13px] ${isYou ? '' : 'text-muted'}`}>
-					{rating} · {side} · captured {captured}
+					{rating} · {side}
+					{captured && ` · captured ${captured}`}
 				</span>
 			</span>
 			<span
