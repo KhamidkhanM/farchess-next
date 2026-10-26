@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { recentGames } from '../../data/demo';
+import { GameSummary } from '../../types/api';
 import { changeColor, formatChange } from '../../utils';
 
 const badges = {
@@ -8,7 +8,22 @@ const badges = {
 	draw: { label: 'Draw', className: 'bg-line-strong text-cream' },
 };
 
-const RecentGames = () => {
+interface RecentGamesProps {
+	games: GameSummary[];
+	username: string; // whose games these are, so we know which side was theirs
+}
+
+// Turns a game into one table row, seen from this player's side of the board
+const toRow = (game: GameSummary, username: string) => {
+	const mySide = game.white.username === username ? 'white' : 'black';
+	const me = game[mySide];
+	const opponent = mySide === 'white' ? game.black : game.white;
+	const winner = game.result === '1-0' ? 'white' : game.result === '0-1' ? 'black' : null;
+	const result: keyof typeof badges = !winner ? 'draw' : winner === mySide ? 'win' : 'loss';
+	return { id: game._id, result, opponent, opening: game.opening, time: game.timeControl, change: me.ratingChange };
+};
+
+const RecentGames = ({ games, username }: RecentGamesProps) => {
 	return (
 		<section aria-labelledby="recent-games" className="flex flex-col gap-3">
 			<h2 id="recent-games" className="font-display text-2xl font-bold">
@@ -30,7 +45,7 @@ const RecentGames = () => {
 						</tr>
 					</thead>
 					<tbody>
-						{recentGames.map((game) => (
+						{games.map((game) => toRow(game, username)).map((game) => (
 							<tr key={game.id} className="border-t border-line">
 								<td className="px-[18px] py-3.5">
 									<span
@@ -40,7 +55,8 @@ const RecentGames = () => {
 									</span>
 								</td>
 								<td className="px-[18px] py-3.5 font-semibold">
-									{game.opponent} <span className="font-mono text-[13px] font-normal text-muted">{game.opponentRating}</span>
+									{game.opponent.username}{' '}
+									<span className="font-mono text-[13px] font-normal text-muted">{game.opponent.rating}</span>
 								</td>
 								<td className="px-[18px] py-3.5 text-soft">{game.opening}</td>
 								<td className="px-[18px] py-3.5 font-mono text-soft">{game.time}</td>
@@ -48,7 +64,7 @@ const RecentGames = () => {
 									{formatChange(game.change)}
 								</td>
 								<td className="px-[18px] py-3.5 text-right">
-									<Link href="/game" className="font-bold">
+									<Link href={`/game?id=${game.id}`} className="font-bold">
 										Review
 									</Link>
 								</td>
