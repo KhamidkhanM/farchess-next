@@ -53,7 +53,7 @@ const NewGamePanel = ({ timeControls }: NewGamePanelProps) => {
 					Invite a friend
 				</Link>
 				<Link
-					href="/game"
+					href="/computer"
 					className="flex min-h-12 items-center justify-center rounded-[14px] border border-line-strong font-bold text-cream hover:bg-panel hover:text-cream"
 				>
 					vs computer
