@@ -21,12 +21,12 @@ export default function Game() {
 	// /game?id=... opens that game. Plain /game opens the most watched live game.
 	// router.isReady is false for a moment while Next.js reads the ?id= part
 	const path = !router.isReady ? null : typeof id === 'string' ? `/games/${id}` : '/games/featured';
-	const { data: game, loading, error } = useApi<GameData>(path);
+	const { data: game, loading, error, status } = useApi<GameData>(path);
 
 	if (!game) {
 		return (
 			<main className="mx-auto flex max-w-xl flex-col gap-4 px-5 py-12">
-				<ApiStatus loading={loading} error={error} />
+				<ApiStatus loading={loading} error={error} status={status} />
 				{error && (
 					<Link href="/" className="font-bold">
 						Back to the lobby

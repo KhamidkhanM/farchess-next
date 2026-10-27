@@ -11,7 +11,7 @@ import { CURRENT_USERNAME } from '@/libs/config';
 import { GameSummary } from '@/libs/types/api';
 
 export default function Profile() {
-	const { data: member, loading, error } = useCurrentMember();
+	const { data: member, loading, error, status } = useCurrentMember();
 	const recent = useApi<GameSummary[]>(`/games?player=${CURRENT_USERNAME}&limit=5`);
 
 	return (
@@ -28,7 +28,7 @@ export default function Profile() {
 					</div>
 				</>
 			) : (
-				<ApiStatus loading={loading} error={error} />
+				<ApiStatus loading={loading} error={error} status={status} />
 			)}
 			{recent.data ? <RecentGames games={recent.data} username={CURRENT_USERNAME} /> : <ApiStatus {...recent} />}
 		</LayoutSidebar>

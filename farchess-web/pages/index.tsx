@@ -3,7 +3,7 @@ import ChessBoard from '@/libs/components/board/ChessBoard';
 import NewGamePanel from '@/libs/components/homepage/NewGamePanel';
 import LiveGames from '@/libs/components/homepage/LiveGames';
 import EventCard from '@/libs/components/homepage/EventCard';
-import ApiStatus from '@/libs/components/common/ApiStatus';
+import ApiStatus, { SeedHint } from '@/libs/components/common/ApiStatus';
 import useGreeting from '@/libs/hooks/useGreeting';
 import useApi from '@/libs/hooks/useApi';
 import { CURRENT_USERNAME } from '@/libs/config';
@@ -29,6 +29,13 @@ export default function Lobby() {
 					</p>
 				)}
 			</div>
+
+			{lobby.data?.online === 0 && (
+				<div role="alert" className="flex flex-col gap-1 rounded-[18px] bg-panel p-5">
+					<p className="font-bold text-loss">The database has no players yet.</p>
+					<SeedHint />
+				</div>
+			)}
 
 			<section aria-label="Play" className="flex flex-wrap items-stretch gap-7">
 				<div className="max-w-[520px] flex-[1_1_420px]">
