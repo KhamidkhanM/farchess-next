@@ -5,7 +5,7 @@ export type PieceColor = 'white' | 'black';
 export interface Square {
 	name: string; // like "e4"
 	dark: boolean;
-	piece: { color: PieceColor; glyph: string } | null;
+	piece: { color: PieceColor; type: string; glyph: string } | null;
 }
 
 export const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
@@ -13,6 +13,7 @@ export const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
 // We always draw the solid glyphs and color them ourselves, so white
 // pieces look as big and bold as black ones.
 const glyphs: Record<string, string> = { k: '♚', q: '♛', r: '♜', b: '♝', n: '♞', p: '♟' };
+const names: Record<string, string> = { k: 'king', q: 'queen', r: 'rook', b: 'bishop', n: 'knight', p: 'pawn' };
 
 // U+FE0E asks the browser to show the symbol as text, not as an emoji
 const TEXT_STYLE = '︎';
@@ -37,7 +38,7 @@ export const parseFen = (fen: string): Square[] => {
 			} else {
 				const color: PieceColor = char === char.toUpperCase() ? 'white' : 'black';
 				const glyph = glyphs[char.toLowerCase()] + TEXT_STYLE;
-				squares.push(makeSquare(row, col++, { color, glyph }));
+				squares.push(makeSquare(row, col++, { color, type: names[char.toLowerCase()], glyph }));
 			}
 		}
 	});
