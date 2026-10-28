@@ -1,13 +1,46 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { TimeControl } from '../../types/api';
+import { useRouter } from 'next/router';
+import { apiGet, apiSend } from '../../api';
+import { CURRENT_USERNAME } from '../../config';
+import { GameSummary, TimeControl } from '../../types/api';
 
 interface NewGamePanelProps {
 	timeControls: TimeControl[];
 }
 
 const NewGamePanel = ({ timeControls }: NewGamePanelProps) => {
+	const router = useRouter();
 	const [picked, setPicked] = useState<string>('3+2');
+	const [busy, setBusy] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
+
+	const openGame = async (findOpponent: boolean) => {
+		setBusy(true);
+		setError(null);
+		try {
+			// "Play": first look for someone already waiting with this time control
+			if (findOpponent) {
+				const open = await apiGet<GameSummary[]>(`/games/open?timeControl=${encodeURIComponent(picked)}`);
+				const other = open.find((game) => ![game.white.username, game.black.username].includes(CURRENT_USERNAME));
+				if (other) {
+					await apiSend('POST', `/games/${other._id}/join`, { username: CURRENT_USERNAME });
+					router.push(`/game?id=${other._id}`);
+					return;
+				}
+			}
+			// Nobody waiting, or "Invite a friend": open a new game and wait on its page
+			const game = await apiSend<GameSummary>('POST', '/games', {
+				username: CURRENT_USERNAME,
+				timeControl: picked,
+				color: 'random',
+			});
+			router.push(`/game?id=${game._id}`);
+		} catch (err) {
+			setError((err as Error).message);
+			setBusy(false);
+		}
+	};
 
 	return (
 		<div className="flex flex-1 basis-[340px] flex-col gap-[18px]">
@@ -38,20 +71,29 @@ const NewGamePanel = ({ timeControls }: NewGamePanelProps) => {
 				</div>
 			</fieldset>
 
-			<Link
-				href="/game"
-				className="flex min-h-[60px] items-center justify-center rounded-2xl bg-brass font-display text-[22px] font-extrabold text-espresso hover:bg-brass-light hover:text-espresso"
+			<button
+				type="button"
+				onClick={() => openGame(true)}
+				disabled={busy}
+				className="flex min-h-[60px] items-center justify-center rounded-2xl bg-brass font-display text-[22px] font-extrabold text-espresso hover:bg-brass-light disabled:opacity-60"
 			>
-				Play {picked}
-			</Link>
+				{busy ? 'Finding a game…' : `Play ${picked}`}
+			</button>
+			{error && (
+				<p role="alert" className="font-bold text-loss">
+					{error}
+				</p>
+			)}
 
 			<div className="grid grid-cols-2 gap-2.5">
-				<Link
-					href="/game"
-					className="flex min-h-12 items-center justify-center rounded-[14px] border border-line-strong font-bold text-cream hover:bg-panel hover:text-cream"
+				<button
+					type="button"
+					onClick={() => openGame(false)}
+					disabled={busy}
+					className="flex min-h-12 items-center justify-center rounded-[14px] border border-line-strong font-bold text-cream hover:bg-panel disabled:opacity-60"
 				>
 					Invite a friend
-				</Link>
+				</button>
 				<Link
 					href="/computer"
 					className="flex min-h-12 items-center justify-center rounded-[14px] border border-line-strong font-bold text-cream hover:bg-panel hover:text-cream"
