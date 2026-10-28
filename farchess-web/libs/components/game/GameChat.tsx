@@ -1,4 +1,6 @@
 import { FormEvent, useState } from 'react';
+import { apiSend } from '../../api';
+import { ChatMessage as SavedMessage } from '../../types/api';
 
 interface ChatMessage {
 	id: string;
@@ -7,21 +9,30 @@ interface ChatMessage {
 }
 
 interface GameChatProps {
+	gameId: string;
 	me: string;
 	initialMessages: ChatMessage[];
 }
 
-const GameChat = ({ me, initialMessages }: GameChatProps) => {
+const GameChat = ({ gameId, me, initialMessages }: GameChatProps) => {
 	const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
 	const [draft, setDraft] = useState<string>('');
+	const [error, setError] = useState<string | null>(null);
 
-	// For now new messages only live in this page. Later they will be sent to the server.
-	const sendHandler = (e: FormEvent) => {
+	// Show the message straight away, then save it. The server answers with the whole chat.
+	const sendHandler = async (e: FormEvent) => {
 		e.preventDefault();
 		const text = draft.trim();
 		if (!text) return;
 		setMessages([...messages, { id: String(Date.now()), from: me, text }]);
 		setDraft('');
+		setError(null);
+		try {
+			const saved = await apiSend<SavedMessage[]>('POST', `/games/${gameId}/chat`, { from: me, text });
+			setMessages(saved.map((message) => ({ id: message._id, from: message.from, text: message.text })));
+		} catch (err) {
+			setError(`Not saved: ${(err as Error).message}`);
+		}
 	};
 
 	return (
@@ -36,6 +47,11 @@ const GameChat = ({ me, initialMessages }: GameChatProps) => {
 					</p>
 				))}
 			</div>
+			{error && (
+				<p role="alert" className="px-4 pb-2 text-sm font-bold text-loss">
+					{error}
+				</p>
+			)}
 			<form onSubmit={sendHandler} className="flex gap-2 border-t border-line p-2.5">
 				<label htmlFor="game-chat-message" className="sr-only">
 					Message

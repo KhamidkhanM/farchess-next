@@ -103,6 +103,7 @@ export default function Game() {
 					<PlayerCard {...player('white')} side="white" />
 					<GameChat
 						key={`chat-${game._id}`}
+						gameId={game._id}
 						me={CURRENT_USERNAME}
 						initialMessages={game.chat.map((message) => ({ id: message._id, from: message.from, text: message.text }))}
 					/>
