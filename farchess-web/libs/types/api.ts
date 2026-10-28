@@ -51,7 +51,7 @@ export interface GameSummary {
 	_id: string;
 	white: GamePlayer;
 	black: GamePlayer;
-	status: 'live' | 'finished';
+	status: 'waiting' | 'live' | 'finished'; // waiting = nobody has taken the second seat yet
 	result?: GameResult;
 	timeControl: string;
 	opening: string;
@@ -65,6 +65,9 @@ export interface Game extends GameSummary {
 	evaluation: number;
 	watching: number;
 	chat: ChatMessage[];
+	turnStartedAt?: string; // when the player to move started thinking. Sample games have none.
+	drawOffer: string; // username of the player offering a draw, or empty
+	endReason: string; // like "checkmate" or "resignation"
 }
 
 export interface Tournament {
