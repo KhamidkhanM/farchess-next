@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { apiSend } from '../../api';
 import { ChatMessage as SavedMessage } from '../../types/api';
 
@@ -18,6 +18,13 @@ const GameChat = ({ gameId, me, initialMessages }: GameChatProps) => {
 	const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
 	const [draft, setDraft] = useState<string>('');
 	const [error, setError] = useState<string | null>(null);
+
+	// The game page loads the game again every second. Show messages the other player sent.
+	useEffect(() => {
+		setMessages(initialMessages);
+		// Only when the number of messages changes, not on every reload of the same chat
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [initialMessages.length]);
 
 	// Show the message straight away, then save it. The server answers with the whole chat.
 	const sendHandler = async (e: FormEvent) => {
