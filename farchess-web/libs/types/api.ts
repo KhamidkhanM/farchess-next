@@ -86,3 +86,12 @@ export interface Lobby {
 	timeControls: TimeControl[];
 	nextTournament: Tournament | null;
 }
+
+export interface Puzzle {
+	_id: string;
+	title: string;
+	fen: string; // the side to move solves the puzzle
+	solution: string[]; // your moves and the opponent's replies, taking turns
+	rating: number;
+	theme: string;
+}
