@@ -24,8 +24,12 @@ export interface Member {
 	ratings: Rating[];
 	blitzHistory: number[];
 	coachTip?: CoachTip;
+	friends: string[]; // usernames
 	createdAt: string; // the date they joined, as an ISO string
 }
+
+// What player lists send: just enough for one row
+export type PlayerSummary = Pick<Member, '_id' | 'username' | 'city' | 'gamesPlayed' | 'ratings'>;
 
 export interface GamePlayer {
 	username: string;
