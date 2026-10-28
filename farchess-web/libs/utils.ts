@@ -9,3 +9,12 @@ export const formatClock = (seconds: number) => `${Math.floor(seconds / 60)}:${S
 
 // Two moves (white then black) make one full move: 18 moves → move 9
 export const moveNumber = (moves: string[]) => Math.ceil(moves.length / 2);
+
+// Like "SAT · 18:00 TASHKENT". Always Tashkent time, wherever the visitor is.
+export const formatStart = (iso: string) => {
+	const date = new Date(iso);
+	const options = { timeZone: 'Asia/Tashkent' } as const;
+	const day = date.toLocaleDateString('en-US', { ...options, weekday: 'short', day: 'numeric', month: 'short' });
+	const time = date.toLocaleTimeString('en-GB', { ...options, hour: '2-digit', minute: '2-digit' });
+	return `${day} · ${time} Tashkent`.toUpperCase();
+};

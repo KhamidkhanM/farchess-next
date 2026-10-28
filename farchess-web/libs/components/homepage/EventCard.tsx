@@ -1,18 +1,10 @@
 import Link from 'next/link';
 import { Tournament } from '../../types/api';
+import { formatStart } from '../../utils';
 
 interface EventCardProps {
 	tournament: Tournament;
 }
-
-// Like "SAT · 18:00 TASHKENT". Always Tashkent time, wherever the visitor is.
-const formatStart = (iso: string) => {
-	const date = new Date(iso);
-	const options = { timeZone: 'Asia/Tashkent' } as const;
-	const day = date.toLocaleDateString('en-US', { ...options, weekday: 'short' });
-	const time = date.toLocaleTimeString('en-GB', { ...options, hour: '2-digit', minute: '2-digit' });
-	return `${day} · ${time} Tashkent`.toUpperCase();
-};
 
 const EventCard = ({ tournament }: EventCardProps) => {
 	return (

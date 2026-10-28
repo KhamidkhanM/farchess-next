@@ -72,6 +72,7 @@ export interface Tournament {
 	format: string;
 	joined: number;
 	capacity: number;
+	players: string[]; // usernames of members who joined
 }
 
 export interface TimeControl {
