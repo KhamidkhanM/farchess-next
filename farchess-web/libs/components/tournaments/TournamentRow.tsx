@@ -15,7 +15,8 @@ const TournamentRow = ({ tournament, featured, onChange }: TournamentRowProps) =
 	const [busy, setBusy] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const joined = tournament.players.includes(CURRENT_USERNAME);
+	// Older sample data has no players list yet
+	const joined = (tournament.players ?? []).includes(CURRENT_USERNAME);
 	const full = tournament.joined >= tournament.capacity;
 	const percent = Math.min(100, Math.round((tournament.joined / tournament.capacity) * 100));
 	const headingId = `tournament-${tournament._id}`;
